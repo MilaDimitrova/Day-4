@@ -1,0 +1,158 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void setBit(int* mask, int n)
+{
+    *mask |= (1 << n);
+}
+
+void eraseBit(int* mask, int n)
+{
+    *mask &= ~(1 << n);
+}
+
+int isSet(int mask, int n)
+{
+    return mask & (1 << n);
+}
+
+int onesCount(int mask)
+{
+    int count = 0;
+    for (int i = 0; i < sizeof(int) * 8; i++)
+    {
+        if (isSet(mask, i))
+        {
+            count++;
+        }
+    }
+    return count;
+}
+
+int zerosCount(int mask)
+{
+    return sizeof(int) * 8 - onesCount(mask);
+}
+
+void present(int mask)
+{
+    for(int i =0; i < sizeof(int) * 8; i++)
+    {
+        if(isSet(mask, i))
+        {
+            printf("Student %d present\n", i);
+        }else
+        {
+            printf("Student %d absent\n", i);
+        }
+    }
+}
+
+int absent(int mask, int n)
+{
+    return isSet(mask, n) ? 0 : 1;
+}
+
+int validation(int n)
+{
+    return n > 32 || n < 0 ? 0 : 1;
+}
+
+
+
+int main()
+{
+    int prisustviq = 0;
+    int option;
+    while (1)
+    {
+        printf("1. Write a presence\n");
+        printf("2. Write an absence\n");
+        printf("3. Information\n");
+        printf("4. Check by number\n");
+        printf("5. Exit\n");
+        scanf("%d", &option);
+
+
+        if (option == 1)
+        {
+            int n;
+            printf("Student number: ");
+            scanf("%d", &n);
+            if(validation(n))
+            {
+                setBit(&prisustviq, n);
+            }
+            else
+            {
+               printf("Invalid number\n");
+            }
+
+        }
+
+
+        else if (option == 2)
+        {
+            int n;
+            printf("Student number: ");
+            scanf("%d", &n);
+
+            if(validation(n))
+            {
+                eraseBit(&prisustviq, n);
+            }
+            else
+            {
+               printf("Invalid number\n");
+            }
+        }
+
+
+        else if (option == 3)
+        {
+            printf("Number of attendance: %d\n", onesCount(prisustviq));
+            printf("Number of absences: %d\n", zerosCount(prisustviq));
+            present(prisustviq);
+        }
+
+
+        else if (option == 4)
+        {
+            int n;
+            printf("Student number: ");
+            scanf("%d", &n);
+
+            if(validation(n))
+            {
+               if(absent(prisustviq, n))
+                {
+                    printf("Student %d absent\n", n);
+                }
+                else
+                {
+                    printf("Student %d present\n", n);
+                }
+            }
+            else
+            {
+                printf("Invalid number\n");
+            }
+
+
+        }
+
+
+        else if(option == 5)
+        {
+            break;
+        }
+
+
+        else
+        {
+            printf("Invalid command \n");
+        }
+    }
+    return 0;
+}
+
